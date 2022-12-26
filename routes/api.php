@@ -15,5 +15,9 @@ Route::prefix('auth')->middleware('guest')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    //
+    Route::get('todos', [TodoController::class, 'index'])
+        ->name('api.todos.index');
+
+    Route::post('todos', [TodoController::class, 'store'])
+        ->name('api.todos.store');
 });

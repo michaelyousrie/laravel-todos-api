@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use App\Helpers\UnifiedResponse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
-class RegisterRequest extends FormRequest
+class CreateTodoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +27,8 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'min:3', 'max:5', 'unique:users,name'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:6', 'max:50']
+            'title' => ['required', 'min:4', 'max:50', Rule::unique('todos', 'title')->where('user_id', request()->user()->id)],
+            'body' => ['required', 'min:4', 'max:999', Rule::unique('todos', 'body')->where('user_id', request()->user()->id)]
         ];
     }
 

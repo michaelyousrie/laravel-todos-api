@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Traits\HasTimestamps;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class TodoResource extends JsonResource
 {
     use HasTimestamps;
 
@@ -20,9 +20,8 @@ class UserResource extends JsonResource
         return array_merge(
             [
                 'id' => $this->id,
-                'name' => $this->name,
-                'email' => $this->email,
-                'api_token' => $this->when($this->api_token, $this->api_token, null),
+                'title' => $this->title,
+                'body' => $this->body,
             ],
             $this->getTimestamp()
         );

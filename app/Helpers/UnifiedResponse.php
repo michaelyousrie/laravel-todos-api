@@ -42,6 +42,15 @@ class UnifiedResponse
         ], 404);
     }
 
+    public static function unauthenticated(array $data = [])
+    {
+        return self::response([
+            'status' => false,
+            'message' => 'Unauthenticated :(',
+            'data' => $data
+        ], 401);
+    }
+
     private static function response(array $data, int $statusCode)
     {
         return Response::json($data, $statusCode);
