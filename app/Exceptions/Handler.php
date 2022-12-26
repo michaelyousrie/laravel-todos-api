@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Helpers\UnifiedResponse;
+use Illuminate\Support\Pluralizer;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,6 +48,19 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (NotFoundHttpException $e) {
+            if (request()->expectsJson()) {
+                $modelName = last(explode('\\', $e->getPrevious()->getModel())) ?? '-';
+                $pluralModelName = strtolower(Pluralizer::plural($modelName));
+
+                return UnifiedResponse::notFound([
+                    'errors' => [
+                        $pluralModelName => ["We couldn't find a {$modelName} with the requested data."]
+                    ]
+                ])->throwResponse();
+            }
         });
     }
 }

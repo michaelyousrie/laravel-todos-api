@@ -33,4 +33,13 @@ class TodoController extends Controller
             'todo' => new TodoResource($todo)
         ]);
     }
+
+    public function show(Todo $todo)
+    {
+        $this->authorize('view', $todo);
+
+        return UnifiedResponse::success([
+            'todo' => new TodoResource($todo)
+        ]);
+    }
 }

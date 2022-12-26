@@ -20,4 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('todos', [TodoController::class, 'store'])
         ->name('api.todos.store');
+
+    Route::get('todos/{todo}', [TodoController::class, 'show'])
+        ->name('api.todos.show');
 });
