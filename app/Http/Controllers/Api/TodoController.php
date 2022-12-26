@@ -8,6 +8,7 @@ use App\Helpers\UnifiedResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TodoResource;
 use App\Http\Requests\CreateTodoRequest;
+use App\Http\Requests\UpdateTodoRequest;
 
 class TodoController extends Controller
 {
@@ -41,5 +42,28 @@ class TodoController extends Controller
         return UnifiedResponse::success([
             'todo' => new TodoResource($todo)
         ]);
+    }
+
+    public function update(Todo $todo, UpdateTodoRequest $request)
+    {
+        $this->authorize('update', $todo);
+
+        $todo->update([
+            'title' => $request->get('title', $todo->title),
+            'body' => $request->get('body', $todo->body)
+        ]);
+
+        return UnifiedResponse::success([
+            'todo' => new TodoResource($todo)
+        ]);
+    }
+
+    public function destroy(Todo $todo)
+    {
+        $this->authorize('delete', $todo);
+
+        $todo->delete();
+
+        return UnifiedResponse::deleted();
     }
 }

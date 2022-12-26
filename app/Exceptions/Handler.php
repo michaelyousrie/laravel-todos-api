@@ -52,14 +52,7 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (NotFoundHttpException $e) {
             if (request()->expectsJson()) {
-                $modelName = last(explode('\\', $e->getPrevious()->getModel())) ?? '-';
-                $pluralModelName = strtolower(Pluralizer::plural($modelName));
-
-                return UnifiedResponse::notFound([
-                    'errors' => [
-                        $pluralModelName => ["We couldn't find a {$modelName} with the requested data."]
-                    ]
-                ])->throwResponse();
+                return UnifiedResponse::notFound()->throwResponse();
             }
         });
     }

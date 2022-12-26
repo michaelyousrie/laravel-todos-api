@@ -11,6 +11,12 @@ class TodoPolicy
 {
     use HandlesAuthorization;
 
+    // Here, we're sending Not Found (404) instead of Unauthroized (401) to protect the state of our database.
+    // We don't want a malicious guy to know that there's a todo that exists with a specific ID..
+    // when a request is sent to a Todo that isn't owned by the currently logged in user.
+
+    // It's confusing a bit but a regular user shouldn't care if they're unauthorized to view the note or it doesn't exist.
+
     /**
      * Determine whether the user can view the model.
      *
@@ -22,7 +28,7 @@ class TodoPolicy
     {
         return $user->id === $todo->user_id ?
             self::allow()
-            : UnifiedResponse::unauthenticated()->throwResponse();
+            : UnifiedResponse::notFound()->throwResponse();
     }
 
     /**
@@ -34,7 +40,9 @@ class TodoPolicy
      */
     public function update(User $user, Todo $todo)
     {
-        return false;
+        return $user->id === $todo->user_id ?
+            self::allow()
+            : UnifiedResponse::notFound()->throwResponse();
     }
 
     /**
@@ -46,6 +54,8 @@ class TodoPolicy
      */
     public function delete(User $user, Todo $todo)
     {
-        return false;
+        return $user->id === $todo->user_id ?
+            self::allow()
+            : UnifiedResponse::notFound()->throwResponse();
     }
 }

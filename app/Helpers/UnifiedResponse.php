@@ -51,6 +51,15 @@ class UnifiedResponse
         ], 401);
     }
 
+    public static function deleted(array $data = [])
+    {
+        return self::response([
+            'status' => true,
+            'message' => 'Resource Deleted successfully :)',
+            'data' => $data
+        ], 200);
+    }
+
     private static function response(array $data, int $statusCode)
     {
         return Response::json($data, $statusCode);
