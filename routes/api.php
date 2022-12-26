@@ -15,8 +15,9 @@ Route::prefix('auth')->middleware('guest')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    // I considered using a prefixed group that has prefix "todos"...
-    // But I didn't like it. It felt unnatural as I had to read the prefix then add the route url to the prefix. Didn't like it.
+    // I considered using a prefixed group that has prefix "todos"..
+    // But I didn't like it. It felt unnatural as I had to read the prefix then read the url in the route definition to understand the full url.
+    // Didn't like it.
 
     Route::get('todos', [TodoController::class, 'index'])
         ->name('api.todos.index');
